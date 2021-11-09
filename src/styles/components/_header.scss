@@ -1,0 +1,31 @@
+.header {
+  &__inner {
+    display: flex;
+    padding: 20px 0px;
+    justify-content: space-between;
+
+    & > div {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &__info {
+    margin-left: 16px;
+  }
+
+  &__text {
+    color: #9d9d9d;
+    font-weight: 400;
+    line-height: 17px;
+    margin-top: 5px;
+  }
+
+  &__like {
+    margin: 0px 30px;
+  }
+
+  &__basket {
+    margin-right: 10px;
+  }
+}
