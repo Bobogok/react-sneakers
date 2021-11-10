@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Header() {
+function Header(props) {
   return (
     <header className="header">
       <div className="header__inner container">
@@ -18,14 +18,15 @@ function Header() {
           </div>
         </div>
         <div className="header__block-right">
-          <img
-            className="header__basket"
-            width={18}
-            height={18}
-            src="/img/header/basket.svg"
-            alt="Basket"
-          />
-          <div className="header__price">1500 руб.</div>
+          <div className="header__basket" onClick={props.onOpen}>
+            <img
+              width={18}
+              height={18}
+              src="/img/header/basket.svg"
+              alt="Basket"
+            />
+            <div className="header__price">1500 руб.</div>
+          </div>
           <img
             className="header__like"
             width={21}

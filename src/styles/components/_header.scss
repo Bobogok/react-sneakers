@@ -3,11 +3,22 @@
     display: flex;
     padding: 20px 0px;
     justify-content: space-between;
+  }
 
-    & > div {
-      display: flex;
-      align-items: center;
-    }
+  &__block-left,
+  &__block-right {
+    display: flex;
+    align-items: center;
+  }
+
+  &__basket {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  &__price {
+    margin-left: 10px;
   }
 
   &__info {
@@ -23,9 +34,5 @@
 
   &__like {
     margin: 0px 30px;
-  }
-
-  &__basket {
-    margin-right: 10px;
   }
 }

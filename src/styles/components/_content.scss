@@ -1,6 +1,33 @@
 .content {
   padding-top: 40px;
   padding-bottom: 100px;
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  // &__magnifier {
+  //   margin-right: 14px;
+  //   margin-top: auto;
+  //   margin-bottom: auto;
+  // }
+
+  &__search-block {
+    display: flex;
+    align-items: center;
+    border: 1px solid #f3f3f3;
+    border-radius: 10px;
+    padding: 0 13px;
+  }
+
+  &__search {
+    font-size: 16px;
+    border: 0;
+    padding: 15px;
+  }
+
   &__products {
     display: grid;
     justify-content: space-between;
