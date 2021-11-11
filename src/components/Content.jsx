@@ -1,64 +1,44 @@
-import React, { Fragment } from 'react';
-import Card from './Card';
+import React, { Fragment, useState, useEffect } from 'react';
+import axios from 'axios';
+import Home from '../pages/Home';
+import { Link, Route } from 'react-router-dom';
 
-const arr = [
-  {
-    title: 'Мужские Кроссовки Nike Blazer Mid Suede',
-    price: '13999',
-    imageUrl: '/img/content/sneakers/nike-blazer-mid-suede-green.png',
-  },
-  {
-    title: 'Мужские Кроссовки Nike Air Max 270',
-    price: '15999',
-    imageUrl: '/img/content/sneakers/nike-air-max-270.png',
-  },
-  {
-    title: 'Мужские Кроссовки Nike Blazer Mid Suede',
-    price: '8499',
-    imageUrl: '/img/content/sneakers/nike-blazer-mid-suede-white.png',
-  },
-  {
-    title: 'Кроссовки Puma X Aka Boku Future Rider',
-    price: '6999',
-    imageUrl: '/img/content/sneakers/puma-x-aka-boku-future-rider.png',
-  },
-];
+function Content({ addCard }) {
+  const [items, setItems] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [favorites, setFavorites] = useState([]);
 
-function Content() {
+  const onChangeSearchInput = (event) => {
+    setSearchValue(event.target.value);
+  };
+
+  useEffect(() => {
+    axios
+      .get('https://618c2615ded7fb0017bb943e.mockapi.io/items')
+      .then((res) => {
+        setItems(res.data);
+      });
+  }, []);
+
+  const onAddToFavorites = (obj) => {
+    console.log(obj);
+    axios.post('https://618d6117fe09aa0017440709.mockapi.io/favorite', obj);
+    setFavorites((prev) => [...prev, obj]);
+  };
+
   return (
     <Fragment>
-      <div className="content">
-        <div className="content__inner container">
-          <div className="content__item">
-            <h1 className="content__title">Все кроссовки</h1>
-            <div className="content__search-block">
-              <img
-                className="content__magnifier"
-                width={14}
-                height={14}
-                src="/img/content/magnifier.svg"
-                alt="magnifier"
-              />
-              <input
-                className="content__search"
-                type="text"
-                placeholder="Поиск..."
-              />
-            </div>
-          </div>
-          <div className="content__products">
-            {arr.map((obj) => (
-              <Card
-                title={obj.title}
-                price={obj.price}
-                imageUrl={obj.imageUrl}
-                onFavorite={() => console.log('Добавили в закладки')}
-                onClick={() => console.log('Нажали плюс')}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
+      <Route path="/" exact>
+        <Home
+          items={items}
+          searchValue={searchValue}
+          onChangeSearchInput={onChangeSearchInput}
+          setSearchValue={setSearchValue}
+          addCard={addCard}
+          onAddToFavorites={onAddToFavorites}
+        />
+      </Route>
+      <Route path="/favorites"></Route>
     </Fragment>
   );
 }

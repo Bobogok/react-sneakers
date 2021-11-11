@@ -16,11 +16,21 @@
     position: relative;
   }
 
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+  }
+
   &__items {
+    margin: 20px 0px;
     padding-top: 10px;
     border-radius: 20px;
     padding: 30px 20px;
     flex: 1;
+    overflow: auto;
   }
 
   &__item {
@@ -39,14 +49,31 @@
 
   &__text {
     font-weight: 500;
+    font-size: 13px;
+    text-align: center;
 
     &_size_m {
       font-size: 16px;
+      line-height: 24px;
+      font-weight: 400;
+    }
+
+    &_size_max {
+      font-size: 22px;
+    }
+
+    &--grey {
+      color: grey;
+    }
+
+    &_margin-top {
+      margin-top: 21px;
     }
   }
 
   &__price {
     font-weight: 600;
+    font-size: 13px;
 
     &_size_m {
       font-size: 16px;
@@ -87,10 +114,16 @@
     margin-top: 28px;
   }
 
-  &__arrow {
+  &__arrow--right {
     position: absolute;
     top: 40%;
     right: 15%;
+  }
+
+  &__arrow--left {
+    position: absolute;
+    top: 40%;
+    left: 15%;
   }
 
   &__close {

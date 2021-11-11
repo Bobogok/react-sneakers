@@ -1,17 +1,20 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Header(props) {
   return (
     <header className="header">
       <div className="header__inner container">
         <div className="header__block-left">
-          <img
-            className="header__icon"
-            width={40}
-            height={40}
-            src="/img/header/icon.png"
-            alt="Logo"
-          />
+          <Link to="/">
+            <img
+              className="header__logo"
+              width={40}
+              height={40}
+              src="/img/header/logo.png"
+              alt="Logo"
+            />
+          </Link>
           <div className="header__info">
             <h3 className="header__title">REACT SNEAKERS</h3>
             <div className="header__text">Магазин лучших кроссовок</div>
@@ -27,13 +30,15 @@ function Header(props) {
             />
             <div className="header__price">1500 руб.</div>
           </div>
-          <img
-            className="header__like"
-            width={21}
-            height={19}
-            src="/img/header/like.svg"
-            alt="Like"
-          />
+          <Link to="/favorites">
+            <img
+              className="header__like"
+              width={21}
+              height={19}
+              src="/img/header/like.svg"
+              alt="Like"
+            />
+          </Link>
           <img
             className="header__personal-area"
             width={20}
