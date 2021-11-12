@@ -13,7 +13,7 @@ function Home({
     <Fragment>
       <div className="content">
         <div className="content__inner container">
-          <div className="content__item">
+          <div className="content__items">
             <h1 className="content__title">
               {searchValue ? `Поиск: ${searchValue}` : 'Все кроссовки'}
             </h1>
@@ -52,11 +52,9 @@ function Home({
               .map((item) => (
                 <Card
                   key={item.id}
-                  title={item.title}
-                  price={item.price}
-                  imageUrl={item.imageUrl}
                   onPlus={(obj) => addCard(obj)}
                   onFavorites={(obj) => onAddToFavorites(obj)}
+                  {...item}
                 />
               ))}
           </div>

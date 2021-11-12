@@ -1,7 +1,8 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import axios from 'axios';
 import Home from '../pages/Home';
-import { Link, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
+import Favorites from './Favorites';
 
 function Content({ addCard }) {
   const [items, setItems] = useState([]);
@@ -18,12 +19,29 @@ function Content({ addCard }) {
       .then((res) => {
         setItems(res.data);
       });
+    axios
+      .get('https://618e408950e24d0017ce118f.mockapi.io/favorite')
+      .then((res) => {
+        setFavorites(res.data);
+      });
   }, []);
 
-  const onAddToFavorites = (obj) => {
-    console.log(obj);
-    axios.post('https://618d6117fe09aa0017440709.mockapi.io/favorite', obj);
-    setFavorites((prev) => [...prev, obj]);
+  const onAddToFavorites = async (obj) => {
+    try {
+      if (favorites.find((favObj) => favObj.id === obj.id)) {
+        axios.delete(
+          `https://618e408950e24d0017ce118f.mockapi.io/favorite/${obj.id}`
+        );
+      } else {
+        const { data } = await axios.post(
+          'https://618e408950e24d0017ce118f.mockapi.io/favorite',
+          obj
+        );
+        setFavorites((prev) => [...prev, data]);
+      }
+    } catch (err) {
+      alert('Не удалось добавить в фавориты!');
+    }
   };
 
   return (
@@ -38,7 +56,13 @@ function Content({ addCard }) {
           onAddToFavorites={onAddToFavorites}
         />
       </Route>
-      <Route path="/favorites"></Route>
+      <Route path="/favorites">
+        <Favorites
+          items={favorites}
+          addCard={addCard}
+          onAddToFavorites={onAddToFavorites}
+        />
+      </Route>
     </Fragment>
   );
 }

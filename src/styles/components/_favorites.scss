@@ -1,0 +1,17 @@
+.favorites {
+  padding-top: 40px;
+  padding-bottom: 100px;
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__products {
+    display: grid;
+    justify-content: space-between;
+    grid-template-columns: repeat(4, 220px);
+    grid-row-gap: 1em;
+    padding-top: 40px;
+  }
+}

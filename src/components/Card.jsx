@@ -1,16 +1,16 @@
 import React, { Fragment, useState } from 'react';
 
-function Card({ title, imageUrl, price, onPlus, onFavorites }) {
+function Card({ id, title, imageUrl, price, onPlus, onFavorites, favorited }) {
   const [isAdded, setIsAdded] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(favorited);
 
   const onClickPlus = () => {
-    onPlus({ title, imageUrl, price });
+    onPlus({ id, title, imageUrl, price });
     setIsAdded(!isAdded);
   };
 
   const onClickFavorite = () => {
-    onFavorites({ title, imageUrl, price });
+    onFavorites({ id, title, imageUrl, price });
     setIsFavorite(!isFavorite);
   };
 
