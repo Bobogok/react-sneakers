@@ -1,6 +1,10 @@
+import React, { useContext } from 'react';
+
 import Card from './Card';
+import { ContentConxtext } from './Content';
 
 function Favorites({ items, addCard, onAddToFavorites }) {
+  const { favorites } = useContext(ContentConxtext);
   return (
     <>
       <div className="favorites">
@@ -8,7 +12,7 @@ function Favorites({ items, addCard, onAddToFavorites }) {
           <div className="favorites__items">
             <h1 className="favorites__title">Избранное</h1>
             <div className="favorites__products">
-              {items.map((item, index) => (
+              {favorites.map((item, index) => (
                 <Card
                   key={item.id}
                   favorited={true}

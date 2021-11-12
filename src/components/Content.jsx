@@ -1,34 +1,43 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import axios from 'axios';
-import Home from '../pages/Home';
+import React, { Fragment, useState, createContext } from 'react';
 import { Route } from 'react-router-dom';
+import axios from 'axios';
+
+import Home from '../pages/Home';
 import Favorites from './Favorites';
 
-function Content({ addCard }) {
-  const [items, setItems] = useState([]);
+export const ContentConxtext = createContext({});
+
+function Content({
+  favorites,
+  setFavorites,
+  cardItems,
+  setCardItems,
+  items,
+  isLoading,
+}) {
   const [searchValue, setSearchValue] = useState('');
-  const [favorites, setFavorites] = useState([]);
 
   const onChangeSearchInput = (event) => {
     setSearchValue(event.target.value);
   };
 
-  useEffect(() => {
-    axios
-      .get('https://618c2615ded7fb0017bb943e.mockapi.io/items')
-      .then((res) => {
-        setItems(res.data);
-      });
-    axios
-      .get('https://618e408950e24d0017ce118f.mockapi.io/favorite')
-      .then((res) => {
-        setFavorites(res.data);
-      });
-  }, []);
+  const onAddToCard = (obj) => {
+    if (cardItems.find((cardObj) => Number(cardObj.id) === Number(obj.id))) {
+      axios.delete(
+        `https://618d466cfe09aa001744065f.mockapi.io/card/${obj.id}`
+      );
+      setCardItems((prev) =>
+        prev.filter((item) => Number(item.id) !== Number(obj.id))
+      );
+    } else {
+      axios.post('https://618d466cfe09aa001744065f.mockapi.io/card', obj);
+      setCardItems((prev) => [...prev, obj]);
+    }
+  };
 
   const onAddToFavorites = async (obj) => {
     try {
-      if (favorites.find((favObj) => favObj.id === obj.id)) {
+      if (favorites.find((favObj) => Number(favObj.id) === Number(obj.id))) {
         axios.delete(
           `https://618e408950e24d0017ce118f.mockapi.io/favorite/${obj.id}`
         );
@@ -43,27 +52,27 @@ function Content({ addCard }) {
       alert('Не удалось добавить в фавориты!');
     }
   };
-
   return (
-    <Fragment>
-      <Route path="/" exact>
-        <Home
-          items={items}
-          searchValue={searchValue}
-          onChangeSearchInput={onChangeSearchInput}
-          setSearchValue={setSearchValue}
-          addCard={addCard}
-          onAddToFavorites={onAddToFavorites}
-        />
-      </Route>
-      <Route path="/favorites">
-        <Favorites
-          items={favorites}
-          addCard={addCard}
-          onAddToFavorites={onAddToFavorites}
-        />
-      </Route>
-    </Fragment>
+    <ContentConxtext.Provider
+      value={{
+        searchValue,
+        onChangeSearchInput,
+        setSearchValue,
+        onAddToCard,
+        onAddToFavorites,
+        isLoading,
+        favorites,
+      }}
+    >
+      <Fragment>
+        <Route path="/" exact>
+          <Home cardItems={cardItems} items={items} />
+        </Route>
+        <Route path="/favorites">
+          <Favorites />
+        </Route>
+      </Fragment>
+    </ContentConxtext.Provider>
   );
 }
 

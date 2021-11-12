@@ -1,5 +1,6 @@
 import Card from '../components/Card';
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
+import { ContentConxtext } from '../components/Content';
 
 function Home({
   items,
@@ -8,7 +9,27 @@ function Home({
   setSearchValue,
   addCard,
   onAddToFavorites,
+  cardItems,
+  isLoading,
 }) {
+  const state = useContext(ContentConxtext);
+
+  const renderItems = () => {
+    const filtredItems = items.filter((item) =>
+      item.title.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    return (true ? [...Array(10)] : filtredItems).map((item, index) => (
+      <Card
+        key={index}
+        onPlus={(obj) => addCard(obj)}
+        onFavorites={(obj) => onAddToFavorites(obj)}
+        added={cardItems.some((obj) => Number(obj.id) === Number(item.id))}
+        loading={false}
+        {...item}
+      />
+    ));
+  };
+
   return (
     <Fragment>
       <div className="content">
@@ -44,20 +65,7 @@ function Home({
               )}
             </div>
           </div>
-          <div className="content__products">
-            {items
-              .filter((item) =>
-                item.title.toLowerCase().includes(searchValue.toLowerCase())
-              )
-              .map((item) => (
-                <Card
-                  key={item.id}
-                  onPlus={(obj) => addCard(obj)}
-                  onFavorites={(obj) => onAddToFavorites(obj)}
-                  {...item}
-                />
-              ))}
-          </div>
+          <div className="content__products">{renderItems()}</div>
         </div>
       </div>
     </Fragment>
