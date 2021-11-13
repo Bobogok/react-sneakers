@@ -11,18 +11,18 @@ function Card({
   onPlus,
   onFavorites,
   favorited = false,
-  added = false,
   loading = false,
 }) {
   const { isItemAdded } = useContext(ContentConxtext);
   const [isFavorite, setIsFavorite] = useState(favorited);
+  const obj = { id, parentId: id, title, imageUrl, price };
 
   const onClickPlus = () => {
-    onPlus({ id, title, imageUrl, price });
+    onPlus(obj);
   };
 
   const onClickFavorite = () => {
-    onFavorites({ id, title, imageUrl, price });
+    onFavorites(obj);
     setIsFavorite(!isFavorite);
   };
 
@@ -47,15 +47,17 @@ function Card({
         ) : (
           <Fragment>
             <div className="card__favorite" onClick={onClickFavorite}>
-              <img
-                className="card__unliked"
-                width={32}
-                height={32}
-                src={
-                  isFavorite ? '/img/card/liked.svg' : '/img/card/unliked.svg'
-                }
-                alt="liked"
-              />
+              {onFavorites && (
+                <img
+                  className="card__unliked"
+                  width={32}
+                  height={32}
+                  src={
+                    isFavorite ? '/img/card/liked.svg' : '/img/card/unliked.svg'
+                  }
+                  alt="liked"
+                />
+              )}
             </div>
             <img
               className="card__image"
@@ -70,16 +72,18 @@ function Card({
                 <div className="card__text">Цена:</div>
                 <div className="card__sum">{price} руб.</div>
               </div>
-              <img
-                className="card__icon"
-                src={
-                  isItemAdded(id)
-                    ? '/img/card/cheked.png'
-                    : '/img/card/nocheked.png'
-                }
-                alt="ci"
-                onClick={onClickPlus}
-              />
+              {onPlus && (
+                <img
+                  className="card__icon"
+                  src={
+                    isItemAdded(id)
+                      ? '/img/card/cheked.png'
+                      : '/img/card/nocheked.png'
+                  }
+                  alt="ci"
+                  onClick={onClickPlus}
+                />
+              )}
             </div>
           </Fragment>
         )}

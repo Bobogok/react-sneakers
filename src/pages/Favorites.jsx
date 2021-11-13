@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
-import Card from './Card';
-import { ContentConxtext } from './Content';
+import Card from '../components/Card';
+import { ContentConxtext } from '../components/Content';
 
 function Favorites() {
   const { favorites, onAddToFavorites, onAddToCard } =

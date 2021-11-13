@@ -3,9 +3,14 @@ import axios from 'axios';
 
 import InfoBasket from './InfoBasket';
 
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+// import { AppConxtext } from '../App';
 
-function Basket({ onClose, items = [], onRemove, setCardItems, cardItems }) {
+import { useCard } from '../hooks/useCard';
+
+// const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+function Basket({ onClose, onRemoveItem, opened }) {
+  const { cardItems, setCardItems, totalPrice } = useCard();
   const [isOrderComplete, setIsOrderComplete] = useState(false);
   const [orderId, setOrderId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,13 +26,13 @@ function Basket({ onClose, items = [], onRemove, setCardItems, cardItems }) {
       setIsOrderComplete(true);
       setCardItems([]);
 
-      for (let i = 0; i < cardItems.length; i++) {
-        const item = cardItems[i];
-        await axios.delete(
-          'https://618fa890f6bf4500174849c9.mockapi.io/order/' + item.id
-        );
-        await delay(1000);
-      }
+      // for (let i = 0; i < cardItems.length; i++) {
+      //   const item = cardItems[i];
+      //   await axios.delete(
+      //     'https://618fa890f6bf4500174849c9.mockapi.io/order/' + item.id
+      //   );
+      //   await delay(1000);
+      // }
     } catch (err) {
       alert('Не удалось создать заказ');
       console.log(err);
@@ -37,8 +42,10 @@ function Basket({ onClose, items = [], onRemove, setCardItems, cardItems }) {
 
   return (
     <Fragment>
-      <div className="overlay">
-        <div className="basket">
+      <div
+        className={`overlay ${opened ? 'overlay_visible' : 'overlay_hidden'}`}
+      >
+        <div className={`basket ${opened ? 'basket_transform' : ' '}`}>
           <div className="basket__inner">
             <h3 className="basket__title">Корзина</h3>
             <img
@@ -50,9 +57,9 @@ function Basket({ onClose, items = [], onRemove, setCardItems, cardItems }) {
               onClick={onClose}
             />
 
-            {items.length > 0 ? (
+            {cardItems.length > 0 ? (
               <div className="basket__items">
-                {items.map((obj) => (
+                {cardItems.map((obj) => (
                   <div className="basket__item">
                     <img
                       className="basket__image"
@@ -71,7 +78,7 @@ function Basket({ onClose, items = [], onRemove, setCardItems, cardItems }) {
                       height={11}
                       src="/img/basket/delete.svg"
                       alt="delete"
-                      onClick={() => onRemove(obj.id)}
+                      onClick={() => onRemoveItem(obj.id)}
                     />
                   </div>
                 ))}
@@ -92,24 +99,22 @@ function Basket({ onClose, items = [], onRemove, setCardItems, cardItems }) {
                 onCloseCard={onClose}
               />
             )}
-            {items.length > 0 ? (
+            {cardItems.length > 0 ? (
               <div className="basket__order">
                 <div className="basket__block-total">
-                  <div className="basket__text basket__text_size_m">
-                    Итого:{' '}
-                  </div>
+                  <div className="basket__text basket__text_size_m">Итого:</div>
                   <div className="basket__band"></div>
                   <div className="basket__price basket__price_size_m">
-                    21 498 руб.{' '}
+                    {totalPrice} руб.
                   </div>
                 </div>
                 <div className="basket__block-tax">
                   <div className="basket__text basket__text_size_m">
-                    Налог 5%:{' '}
+                    Налог 5%:
                   </div>
                   <div className="basket__band"></div>
                   <div className="basket__price basket__price_size_m">
-                    1074 руб.{' '}
+                    {Math.floor((totalPrice / 100) * 5)} руб.
                   </div>
                 </div>
                 <button

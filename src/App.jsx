@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 import axios from 'axios';
 
 import Header from './components/Header';
 import Content from './components/Content';
 import Basket from './components/Basket';
+
+export const AppConxtext = createContext({});
 
 function App() {
   const [cardOpened, setCardOpened] = useState(false);
@@ -42,25 +44,32 @@ function App() {
 
   return (
     <div className="wrapper">
-      {cardOpened && (
+      <AppConxtext.Provider
+        value={{
+          items,
+          cardItems,
+          setCardItems,
+          favorites,
+          setFavorites,
+          setItems,
+          // onAddToFavorites,
+          isLoading,
+        }}
+      >
         <Basket
-          items={cardItems}
           onClose={() => setCardOpened((prev) => !prev)}
-          onRemove={onRemoveItem}
-          setCardItems={setCardItems}
-          cardItems={cardItems}
+          onRemoveItem={onRemoveItem}
+          opened={cardOpened}
         />
-      )}
-      <Header onOpen={() => setCardOpened((prev) => !prev)} />
-      <Content
-        favorites={favorites}
-        setFavorites={setFavorites}
-        cardItems={cardItems}
-        setCardItems={setCardItems}
-        items={items}
-        setItems={setItems}
-        isLoading={isLoading}
-      />
+        {/* {cardOpened && (
+          <Basket
+            onClose={() => setCardOpened((prev) => !prev)}
+            onRemoveItem={onRemoveItem}
+          />
+        )} */}
+        <Header onOpen={() => setCardOpened((prev) => !prev)} />
+        <Content />
+      </AppConxtext.Provider>
     </div>
   );
 }

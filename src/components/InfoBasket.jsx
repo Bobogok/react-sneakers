@@ -1,11 +1,9 @@
-import React, { useContext } from 'react';
-import { ContentConxtext } from './Content';
+import React from 'react';
+// import { ContentConxtext } from './Content';
 
 const InfoBasket = ({ title, img, description, onCloseCard }) => {
-  // const { setCardOpened } = useContext(ContentConxtext);
-
   return (
-    <div className="basket__empty">
+    <div className="basket__result">
       <img className="basket__image" width={120} src={img} alt="empty-basket" />
       <div className="basket__text basket__text_size_max basket__text_margin-top">
         <b>{title}</b>

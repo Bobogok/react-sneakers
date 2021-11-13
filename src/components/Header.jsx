@@ -1,7 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function Header(props) {
+import { useCard } from '../hooks/useCard';
+
+function Header({ onOpen }) {
+  const { totalPrice } = useCard();
+
   return (
     <header className="header">
       <div className="header__inner container">
@@ -21,14 +25,14 @@ function Header(props) {
           </div>
         </div>
         <div className="header__block-right">
-          <div className="header__basket" onClick={props.onOpen}>
+          <div className="header__basket" onClick={onOpen}>
             <img
               width={18}
               height={18}
               src="/img/header/basket.svg"
               alt="Basket"
             />
-            <div className="header__price">1500 руб.</div>
+            <div className="header__price">{totalPrice} руб.</div>
           </div>
           <Link to="/favorites">
             <img
@@ -39,13 +43,15 @@ function Header(props) {
               alt="Like"
             />
           </Link>
-          <img
-            className="header__personal-area"
-            width={20}
-            height={20}
-            src="/img/header/personal-area.svg"
-            alt="Personal-area"
-          />
+          <Link to="/orders">
+            <img
+              className="header__personal-area"
+              width={20}
+              height={20}
+              src="/img/header/personal-area.svg"
+              alt="Personal-area"
+            />
+          </Link>
         </div>
       </div>
     </header>
