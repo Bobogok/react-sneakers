@@ -112,6 +112,12 @@
     border-radius: 18px;
     position: relative;
     margin-top: 28px;
+
+    &:disabled {
+      background-color: #bebebe;
+      cursor: default;
+      animation: button-loading 0.6s ease-in-out infinite;
+    }
   }
 
   &__arrow--right {
@@ -130,5 +136,17 @@
     position: absolute;
     right: 0;
     cursor: pointer;
+  }
+}
+
+@keyframes button-loading {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
   }
 }

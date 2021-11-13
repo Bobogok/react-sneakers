@@ -3,8 +3,9 @@ import React, { useContext } from 'react';
 import Card from './Card';
 import { ContentConxtext } from './Content';
 
-function Favorites({ items, addCard, onAddToFavorites }) {
-  const { favorites } = useContext(ContentConxtext);
+function Favorites() {
+  const { favorites, onAddToFavorites, onAddToCard } =
+    useContext(ContentConxtext);
   return (
     <>
       <div className="favorites">
@@ -16,7 +17,7 @@ function Favorites({ items, addCard, onAddToFavorites }) {
                 <Card
                   key={item.id}
                   favorited={true}
-                  onPlus={(obj) => addCard(obj)}
+                  onPlus={(obj) => onAddToCard(obj)}
                   onFavorites={(obj) => onAddToFavorites(obj)}
                   {...item}
                 />

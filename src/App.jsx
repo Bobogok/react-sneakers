@@ -47,6 +47,8 @@ function App() {
           items={cardItems}
           onClose={() => setCardOpened((prev) => !prev)}
           onRemove={onRemoveItem}
+          setCardItems={setCardItems}
+          cardItems={cardItems}
         />
       )}
       <Header onOpen={() => setCardOpened((prev) => !prev)} />
@@ -55,7 +57,7 @@ function App() {
         setFavorites={setFavorites}
         cardItems={cardItems}
         setCardItems={setCardItems}
-        itemsList={items}
+        items={items}
         setItems={setItems}
         isLoading={isLoading}
       />

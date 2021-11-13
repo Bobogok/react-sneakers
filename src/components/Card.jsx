@@ -1,5 +1,7 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useContext } from 'react';
 import ContentLoader from 'react-content-loader';
+
+import { ContentConxtext } from './Content';
 
 function Card({
   id,
@@ -12,12 +14,11 @@ function Card({
   added = false,
   loading = false,
 }) {
-  const [isAdded, setIsAdded] = useState(added);
+  const { isItemAdded } = useContext(ContentConxtext);
   const [isFavorite, setIsFavorite] = useState(favorited);
 
   const onClickPlus = () => {
     onPlus({ id, title, imageUrl, price });
-    setIsAdded(!isAdded);
   };
 
   const onClickFavorite = () => {
@@ -72,7 +73,9 @@ function Card({
               <img
                 className="card__icon"
                 src={
-                  isAdded ? '/img/card/cheked.png' : '/img/card/nocheked.png'
+                  isItemAdded(id)
+                    ? '/img/card/cheked.png'
+                    : '/img/card/nocheked.png'
                 }
                 alt="ci"
                 onClick={onClickPlus}

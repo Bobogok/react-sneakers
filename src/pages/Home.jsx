@@ -1,30 +1,31 @@
-import Card from '../components/Card';
 import React, { Fragment, useContext } from 'react';
 import { ContentConxtext } from '../components/Content';
 
-function Home({
-  items,
-  searchValue,
-  onChangeSearchInput,
-  setSearchValue,
-  addCard,
-  onAddToFavorites,
-  cardItems,
-  isLoading,
-}) {
-  const state = useContext(ContentConxtext);
+import Card from '../components/Card';
+
+function Home() {
+  const {
+    items,
+    isLoading,
+    searchValue,
+    onChangeSearchInput,
+    setSearchValue,
+    onAddToCard,
+    onAddToFavorites,
+  } = useContext(ContentConxtext);
 
   const renderItems = () => {
     const filtredItems = items.filter((item) =>
       item.title.toLowerCase().includes(searchValue.toLowerCase())
     );
-    return (true ? [...Array(10)] : filtredItems).map((item, index) => (
+
+    return (isLoading ? [...Array(12)] : filtredItems).map((item, index) => (
       <Card
         key={index}
-        onPlus={(obj) => addCard(obj)}
+        onPlus={(obj) => onAddToCard(obj)}
         onFavorites={(obj) => onAddToFavorites(obj)}
-        added={cardItems.some((obj) => Number(obj.id) === Number(item.id))}
-        loading={false}
+        // added={isItemAdded(item && item.id)}
+        loading={isLoading}
         {...item}
       />
     ));

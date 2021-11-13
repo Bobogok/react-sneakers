@@ -15,6 +15,7 @@ function Content({
   items,
   isLoading,
 }) {
+  console.log(items);
   const [searchValue, setSearchValue] = useState('');
 
   const onChangeSearchInput = (event) => {
@@ -41,6 +42,9 @@ function Content({
         axios.delete(
           `https://618e408950e24d0017ce118f.mockapi.io/favorite/${obj.id}`
         );
+        setFavorites((prev) =>
+          prev.filter((item) => Number(item.id) !== Number(obj.id))
+        );
       } else {
         const { data } = await axios.post(
           'https://618e408950e24d0017ce118f.mockapi.io/favorite',
@@ -52,9 +56,16 @@ function Content({
       alert('Не удалось добавить в фавориты!');
     }
   };
+
+  const isItemAdded = (id) => {
+    return cardItems.some((obj) => Number(obj.id) === Number(id));
+  };
+
   return (
     <ContentConxtext.Provider
       value={{
+        items,
+        cardItems,
         searchValue,
         onChangeSearchInput,
         setSearchValue,
@@ -62,11 +73,12 @@ function Content({
         onAddToFavorites,
         isLoading,
         favorites,
+        isItemAdded,
       }}
     >
       <Fragment>
         <Route path="/" exact>
-          <Home cardItems={cardItems} items={items} />
+          <Home />
         </Route>
         <Route path="/favorites">
           <Favorites />

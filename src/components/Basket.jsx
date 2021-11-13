@@ -1,6 +1,40 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
+import axios from 'axios';
 
-function Basket({ onClose, items = [], onRemove }) {
+import InfoBasket from './InfoBasket';
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+function Basket({ onClose, items = [], onRemove, setCardItems, cardItems }) {
+  const [isOrderComplete, setIsOrderComplete] = useState(false);
+  const [orderId, setOrderId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onClickOrder = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await axios.post(
+        'https://618fa890f6bf4500174849c9.mockapi.io/order',
+        { items: cardItems }
+      );
+      setOrderId(data.id);
+      setIsOrderComplete(true);
+      setCardItems([]);
+
+      for (let i = 0; i < cardItems.length; i++) {
+        const item = cardItems[i];
+        await axios.delete(
+          'https://618fa890f6bf4500174849c9.mockapi.io/order/' + item.id
+        );
+        await delay(1000);
+      }
+    } catch (err) {
+      alert('Не удалось создать заказ');
+      console.log(err);
+    }
+    setIsLoading(false);
+  };
+
   return (
     <Fragment>
       <div className="overlay">
@@ -43,30 +77,20 @@ function Basket({ onClose, items = [], onRemove }) {
                 ))}
               </div>
             ) : (
-              <div className="basket__empty">
-                <img
-                  className="basket__image"
-                  src="/img/basket/empty-basket.png"
-                  alt="empty-basket"
-                />
-                <div className="basket__text basket__text_size_max basket__text_margin-top">
-                  <b>Корзина пустая</b>
-                </div>
-                <div className="basket__text basket__text_size_m basket__text--grey basket__text_margin-top">
-                  Добавьте хотя бы одну пару <br />
-                  кроссовок, чтобы сделать заказ.
-                </div>
-                <button className="basket__button" onClick={onClose}>
-                  Вернуться назад
-                  <img
-                    className="basket__arrow--left"
-                    width={13}
-                    height={12}
-                    src="/img/basket/arrow-left.svg"
-                    alt="arrow-l"
-                  />
-                </button>
-              </div>
+              <InfoBasket
+                title={isOrderComplete ? 'Заказ оформлен!' : 'Корзина пустая'}
+                description={
+                  isOrderComplete
+                    ? `Ваш заказ #${orderId} скоро будет передан курьерской доставке`
+                    : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'
+                }
+                img={
+                  isOrderComplete
+                    ? '/img/basket/complete-order.png'
+                    : '/img/basket/empty-basket.png'
+                }
+                onCloseCard={onClose}
+              />
             )}
             {items.length > 0 ? (
               <div className="basket__order">
@@ -88,7 +112,11 @@ function Basket({ onClose, items = [], onRemove }) {
                     1074 руб.{' '}
                   </div>
                 </div>
-                <button className="basket__button">
+                <button
+                  disabled={isLoading}
+                  className="basket__button"
+                  onClick={onClickOrder}
+                >
                   Оформить заказ
                   <img
                     className="basket__arrow--right"
