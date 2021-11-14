@@ -8,11 +8,18 @@ import Basket from './components/Basket';
 export const AppConxtext = createContext({});
 
 function App() {
+  const [blockScroll, setBlockScroll] = useState(false);
+
   const [cardOpened, setCardOpened] = useState(false);
   const [favorites, setFavorites] = useState([]);
   const [cardItems, setCardItems] = useState([]);
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const isBlockScroll = () => {
+    setBlockScroll((prev) => !prev);
+    document.body.style.overflow = blockScroll ? 'auto' : 'hidden';
+  };
 
   const onRemoveItem = (id) => {
     setCardItems((prev) =>
@@ -60,6 +67,7 @@ function App() {
           onClose={() => setCardOpened((prev) => !prev)}
           onRemoveItem={onRemoveItem}
           opened={cardOpened}
+          isBlockScroll={isBlockScroll}
         />
         {/* {cardOpened && (
           <Basket
@@ -67,7 +75,10 @@ function App() {
             onRemoveItem={onRemoveItem}
           />
         )} */}
-        <Header onOpen={() => setCardOpened((prev) => !prev)} />
+        <Header
+          onOpen={() => setCardOpened((prev) => !prev)}
+          isBlockScroll={isBlockScroll}
+        />
         <Content />
       </AppConxtext.Provider>
     </div>

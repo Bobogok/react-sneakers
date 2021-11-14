@@ -3,8 +3,13 @@ import { Link } from 'react-router-dom';
 
 import { useCard } from '../hooks/useCard';
 
-function Header({ onOpen }) {
+function Header({ onOpen, isBlockScroll }) {
   const { totalPrice } = useCard();
+
+  const blockScrollOpenBasket = () => {
+    isBlockScroll();
+    onOpen();
+  };
 
   return (
     <header className="header">
@@ -25,8 +30,9 @@ function Header({ onOpen }) {
           </div>
         </div>
         <div className="header__block-right">
-          <div className="header__basket" onClick={onOpen}>
+          <div className="header__basket" onClick={blockScrollOpenBasket}>
             <img
+              className="header__basket-image"
               width={18}
               height={18}
               src="/img/header/basket.svg"

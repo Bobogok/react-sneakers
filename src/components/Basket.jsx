@@ -9,7 +9,7 @@ import { useCard } from '../hooks/useCard';
 
 // const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function Basket({ onClose, onRemoveItem, opened }) {
+function Basket({ onClose, onRemoveItem, opened, isBlockScroll }) {
   const { cardItems, setCardItems, totalPrice } = useCard();
   const [isOrderComplete, setIsOrderComplete] = useState(false);
   const [orderId, setOrderId] = useState(null);
@@ -25,19 +25,15 @@ function Basket({ onClose, onRemoveItem, opened }) {
       setOrderId(data.id);
       setIsOrderComplete(true);
       setCardItems([]);
-
-      // for (let i = 0; i < cardItems.length; i++) {
-      //   const item = cardItems[i];
-      //   await axios.delete(
-      //     'https://618fa890f6bf4500174849c9.mockapi.io/order/' + item.id
-      //   );
-      //   await delay(1000);
-      // }
     } catch (err) {
       alert('Не удалось создать заказ');
-      console.log(err);
     }
     setIsLoading(false);
+  };
+
+  const blockScrollCloseBasket = () => {
+    isBlockScroll();
+    onClose();
   };
 
   return (
@@ -54,7 +50,7 @@ function Basket({ onClose, onRemoveItem, opened }) {
               height={32}
               src="/img/basket/close.svg"
               alt="close"
-              onClick={onClose}
+              onClick={blockScrollCloseBasket}
             />
 
             {cardItems.length > 0 ? (
@@ -97,6 +93,7 @@ function Basket({ onClose, onRemoveItem, opened }) {
                     : '/img/basket/empty-basket.png'
                 }
                 onCloseCard={onClose}
+                isBlockScroll={isBlockScroll}
               />
             )}
             {cardItems.length > 0 ? (
